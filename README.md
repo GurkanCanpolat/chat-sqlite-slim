@@ -43,75 +43,67 @@ CREATE TABLE groups (
 
 CREATE TABLE group_members (
 	group_id INTEGER,
-	user_id INTEGER,
-	UNIQUE(group_id, user_id)
-);
+	# bunq-chat
 
-CREATE TABLE messages (
-	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	group_id INTEGER,
-	user_id INTEGER,
-	message TEXT,
-	created_at TEXT
-);
-```
+	Minimal chat backend example (Slim + SQLite).
 
-To apply:
+	Overview
+	--------
+	Small example backend illustrating a layered PHP app (Controllers → Services → Repositories → Models).
 
-```bash
-mkdir -p database
-sqlite3 database/chat.db < database/schema.sql
-```
+	Quickstart
+	----------
+	Requirements:
 
-3. Start the server
+	- PHP 8.1+
+	- Composer
 
-```bash
-php -S localhost:8080 -t public
-```
+	1. Install dependencies
 
-The server will be available at http://localhost:8080
+	```bash
+	composer install
+	```
 
-API examples
-------------
+	2. Prepare the database
 
-Create user
+	Schema file is included as `database/schema.sql`. To (re)create the DB:
 
-POST /users
-Content-Type: application/json
+	```bash
+	mkdir -p database
+	sqlite3 database/chat.db < database/schema.sql
+	```
 
-Body: { "username": "alice" }
+	Note: the local DB was reset for a clean history. A backup `database/chat.db.bak` exists if you need it.
 
-Create group
+	3. Start the server
 
-POST /groups
-Content-Type: application/json
+	```bash
+	php -S localhost:8080 -t public
+	```
 
-Body: { "name": "team-a" }
+	Open API docs:
 
-Join group
+	http://localhost:8080/docs
 
-POST /groups/{id}/join
-Content-Type: application/json
+	Common endpoints
+	----------------
+	- Create user: POST /users  { "username": "alice" }
+	- Get all users: GET /getAllUsers
+	- Create group: POST /groups  { "name": "team-a" }
+	- Join group: POST /groups/{id}/join  { "user_id": "1" }
+	- Send message: POST /groups/{id}/messages  { "user_id": "1", "message": "hello" }
+	- List messages: GET /groups/{id}/messages
 
-Body: { "user_id": 1 }
+	Tests
+	-----
 
-Send message
+	Run tests with:
 
-POST /groups/{id}/messages
-Content-Type: application/json
+	```bash
+	vendor/bin/phpunit
+	```
 
-Body: { "user_id": "1", "message": "hello" }
-
-List messages
-
-GET /groups/{id}/messages
-
-Tests
------
-
-Run the test suite:
-
-```bash
-vendor/bin/phpunit
-```
+	License
+	-------
+	Unlicensed example code — adapt as you wish.
 
