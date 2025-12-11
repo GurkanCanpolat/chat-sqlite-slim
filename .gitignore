@@ -1,0 +1,15 @@
+/vendor/
+/database/
+/.env
+/index.php.bak
+/.idea/
+/.vscode/
+/.DS_Store
+/tests/_output
+
+# Composer
+composer.lock
+
+# Logs
+/tmp/
+
